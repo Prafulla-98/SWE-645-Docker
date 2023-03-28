@@ -3,6 +3,8 @@ Docker container for SWE Assignment 2
 
 To build docker image: `docker build -t [image name] .`
 
+(In order to get the docker image created for our project, please run the following command: `docker pull prafulladevi/swe645-project2:latest`)
+
 To run the docker image as a container: `docker run -it --rm -p 8888:8080 [container name]`
 
 To check if docker image is running: `docker ps -a`
