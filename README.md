@@ -1,6 +1,8 @@
 # SWE-645-Docker
 Docker container for SWE Assignment 2
 
+Our dockerimage can be found here: https://hub.docker.com/r/prafulladevi/swe645-project2/tags
+
 To build docker image: `docker build -t [image name] .`
 
 (In order to get the docker image created for our project, please run the following command: `docker pull prafulladevi/swe645-project2:latest`)
