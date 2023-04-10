@@ -11,7 +11,7 @@ pipeline {
                     DATE_TAG = java.time.LocalDate.now()
                     DATETIME_TAG = java.time.LocalDateTime.now()
                     sh "echo ${DATETIME_TAG}"
-                    sh "docker login -u prafulladevi -p ${DOCKERHUB_PASS}"
+                    sh "sudo docker login -u prafulladevi -p ${DOCKERHUB_PASS}"
                     def customImage = docker.build("prafulladevi/swe645-project2:${DATETIME_TAG}")
                 }
             }
