@@ -4,33 +4,38 @@ pipeline {
         DOCKERHUB_PASS = credentials('docker-pass')
     }
     stages {
+        stage("Clone git repo") {
+            steps {
+                git credentialsId: 'git_credentials', url: 'https://github.com/Prafulla-98/SWE-645-Docker.git'
+            }
+        }
         stage("Building the Student Survey Image") {
             steps {
                 script {
                     checkout scm
-                    sh 'rm -rf *.war'
-                    sh 'jar -cvf SWE-645-HW1.war'
-                    sh 'echo ${BUILD_TIMESTAMP}'
+                    DATE_TAG = java.time.LocalDate.now()
+                    DATETIME_TAG = java.time.LocalDateTime.now()
+                    sh "echo ${DATETIME_TAG}"
                     sh "docker login -u prafulladevi -p ${DOCKERHUB_PASS}"
-                    def customImage = docker.build("prafulladevi/swe645-project2:${BUILD_TIMESTAMP}")
+                    def customImage = docker.build("prafulladevi/swe645-project2:${DATETIME_TAG}")
                 }
             }
         }
         stage("Pushing Image to DockerHub") {
             steps {
                 script {
-                    sh 'docker push prafulladevi/swe645-project2:${BUILD_TIMESTAMP}'
+                    sh 'docker push prafulladevi/swe645-project2:${DATETIME_TAG}'
                 }
             }
         }
         stage("Deploying to Rancher as a single pod") {
             steps {
-                sh 'kubectl set image deployment/swe-hw2-pipeline swe-hw2-pipeline=prafulladevi/swe645-project2:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                sh 'kubectl set image deployment/swe-hw2-pipeline swe-hw2-pipeline=prafulladevi/swe645-project2:${DATETIME_TAG} -n jenkins-pipeline'
             }
         }
         stage("Deploying to Rancher as with load balancer") {
             steps {
-                sh 'kubectl set image deployment/swe-hw2-lb swe-hw2-lb=prafulladevi/swe645-project2:${BUILD_TIMESTAMP} -n jenkins-pipeline'
+                sh 'kubectl set image deployment/swe-hw2-lb swe-hw2-lb=prafulladevi/swe645-project2:${DATETIME_TAG} -n jenkins-pipeline'
             }
         }
     }
